@@ -1,0 +1,16 @@
+
+{% for post in post_list %}
+<div class="card my-4" style="width: 100%;">
+    <div class="card-header">
+        <h2>{{post.title}}</h2>
+    </div>
+    <div class="card-body">
+        <p>{{post.post}}</p>
+    </div>
+    <div class="card-footer">
+        <h5 class="text-right">{{post.author}}</h5>
+    </div>
+
+</div>
+
+{%endfor%}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>Ajax example</title>
+</head>
+<body>
+     <div class="container my-4">
+         <div class="row">
+             <div class="col-md-9 mx-auto">
+                   <div class="content" id="post-container">
+
+                   </div>
+                   <div class="load-img" id="more-data">
+
+                   </div>
+             </div>
+         </div> 
+     </div>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+        var limit=3;
+        var start=0;
+        var action='inactive'
+        function load_post_data(limit, start)
+        {
+            $.ajax({
+                url:'fetch/',
+                method:"GET",
+                data:{
+                    limit:limit,
+                    start:start
+                },
+                caches:false,
+                success:function(response){
+                    $("#post-container").append(response);
+                    if(response==""){
+                        $('#more-data').html("<button type='button' class='btn btn-info'>No Post Found</button>")
+                         action='active';
+                    }else{
+                        $('#more-data').html("<button class='btn btn-success'>Loading more post...</button>")
+                         action='inactive';
+                    }
+                }
+            })
+        }
+
+
+        if(action=='inactive'){
+            action='active',
+            load_post_data(limit, start);
+        }
+        $(window).scroll(function(){
+          if($(window).scrollTop() + $(window).height() > $('#post-container').height() && action =='inactive'){
+              action='active';
+              start=start + limit;
+              setTimeout(function(){
+                  load_post_data(limit, start);
+              }, 1000)
+          }
+      })
+    })
+</script>
+</body>
+</html>
